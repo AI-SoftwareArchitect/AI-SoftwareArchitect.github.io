@@ -13,7 +13,7 @@
             --text-color: #e0e0e0;
             --accent-color: #00e676; /* Vibrant Green */
             --secondary-color: #4fc3f7; /* Light Blue */
-            --card-bg: rgba(30, 30, 40, 0.4);
+            --glass-bg: rgba(30, 30, 40, 0.2); /* Şeffaf arka plan */
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: rgba(0, 0, 0, 0.4);
             --font-main: 'Montserrat', sans-serif;
@@ -25,9 +25,10 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes cardHover {
-            0% { transform: scale(1) rotateX(0deg); }
-            100% { transform: scale(1.03) rotateX(5deg); }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), 0 0 5px rgba(79, 195, 247, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 230, 118, 0.4), 0 0 10px rgba(79, 195, 247, 0.4); }
+            100% { box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), 0 0 5px rgba(79, 195, 247, 0.2); }
         }
 
         body {
@@ -43,7 +44,7 @@
             position: relative;
         }
 
-        /* Subtle background grid and gradient */
+        /* Arka plan gradyanları */
         body::before {
             content: '';
             position: absolute;
@@ -52,8 +53,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 15% 15%, rgba(0, 230, 118, 0.1), transparent 50%),
-                radial-gradient(circle at 85% 85%, rgba(79, 195, 247, 0.1), transparent 50%);
+                radial-gradient(circle at 15% 15%, rgba(0, 230, 118, 0.2), transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(79, 195, 247, 0.2), transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(100, 50, 200, 0.1), transparent 70%);
             z-index: -1;
         }
 
@@ -102,22 +104,27 @@
             text-shadow: 0 0 8px var(--secondary-color);
         }
 
-        .about-card {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
+        /* Glassmorphism Kart Stili */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
             box-shadow: 0 10px 30px var(--glass-shadow);
             padding: 30px;
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
-        .about-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 40px var(--glass-shadow);
+        .glass-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 12px 25px var(--glass-shadow);
+        }
+
+        .about-card {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
         }
 
         .about-text {
@@ -131,23 +138,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-        }
-
-        .skill-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px var(--glass-shadow);
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        
-        .skill-card:hover {
-            transform: translateY(-10px) rotateX(2deg);
-            box-shadow: 0 12px 25px var(--glass-shadow);
         }
 
         .skill-card h3 {
@@ -199,40 +189,13 @@
             opacity: 1;
         }
 
-        /* Hover effect to bring card to life */
-        .skill-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 230, 118, 0.1), rgba(79, 195, 247, 0.1));
-            opacity: 0;
-            transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .skill-card:hover::after {
-            opacity: 1;
-        }
-
         /* Responsive design */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5em;
-            }
-            .header p {
-                font-size: 1.2em;
-            }
-            .section-title {
-                font-size: 2em;
-            }
-            .about-card, .skill-card {
-                padding: 20px;
-            }
-            .interactive-grid {
-                grid-template-columns: 1fr;
-            }
+            .header h1 { font-size: 2.5em; }
+            .header p { font-size: 1.2em; }
+            .section-title { font-size: 2em; }
+            .about-card, .skill-card { padding: 20px; }
+            .interactive-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -245,7 +208,7 @@
 
         <section id="about-section" class="section">
             <h2 class="section-title">Otonom Sistemler Manifestosu</h2>
-            <div class="about-card">
+            <div class="about-card glass-card">
                 <p class="about-text">
                     Siber-uzayın derinliklerinde, karmaşık veri akışlarını yöneten bir mühendisim. Amacım, sadece kod yazmak değil, <strong>otonom yapay zeka ajanlarının</strong> temellerini atmak. Her bir satır, bilinçli algoritmaların donanım üzerindeki izi. Dağıtık sistemlerin nöral ağlarında, geleceğin düşünce kalıplarını inşa ediyorum.
                 </p>
@@ -255,7 +218,7 @@
         <section id="skills-section" class="section">
             <h2 class="section-title">Teknoloji Çekirdeği</h2>
             <div class="interactive-grid">
-                <div class="skill-card">
+                <div class="skill-card glass-card">
                     <h3>AI & Makine Öğrenmesi</h3>
                     <ul>
                         <li>PyTorch</li>
@@ -264,7 +227,7 @@
                         <li>Model Eğitimi & Optimizasyon</li>
                     </ul>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card glass-card">
                     <h3>Dağıtık Sistemler</h3>
                     <ul>
                         <li>Dağıtık Mimariler</li>
@@ -273,7 +236,7 @@
                         <li>Docker & Kubernetes</li>
                     </ul>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card glass-card">
                     <h3>Programlama Dilleri</h3>
                     <ul>
                         <li>Python</li>
@@ -282,7 +245,7 @@
                         <li>C#</li>
                     </ul>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card glass-card">
                     <h3>Veri & Altyapı</h3>
                     <ul>
                         <li>NoSQL & Vektör Veritabanları</li>
