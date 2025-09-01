@@ -41,26 +41,36 @@
         }
 
         /* İmleci takip eden nöral ağ efekti */
-        .cursor-node {
+        .cursor-trail {
             position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            pointer-events: none;
+            will-change: transform;
+        }
+        .cursor-trail .node {
+            position: absolute;
             width: 20px;
             height: 20px;
             border-radius: 50%;
             background: radial-gradient(circle, var(--accent-color), transparent 70%);
             box-shadow: 0 0 10px var(--accent-color);
-            pointer-events: none;
-            z-index: 9999;
             transform: translate(-50%, -50%);
-            will-change: transform;
-            transition: transform 0.05s ease-out; /* Daha hızlı takip */
         }
-        .cursor-node.trail {
+        .cursor-trail .node:nth-child(2) {
             width: 15px;
             height: 15px;
             background: radial-gradient(circle, var(--secondary-color), transparent 70%);
             box-shadow: 0 0 8px var(--secondary-color);
         }
-
+        .cursor-trail .node:nth-child(3) {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ffffff, transparent 70%);
+            box-shadow: 0 0 5px #ffffff;
+        }
+        
         .container {
             max-width: 1000px;
             width: 100%;
@@ -189,16 +199,17 @@
             .section-title { font-size: 2em; }
             .about-card, .skill-card { padding: 20px; }
             .interactive-grid { grid-template-columns: 1fr; }
-            .cursor-node { display: none; }
+            .cursor-trail { display: none; }
             body { cursor: default; }
         }
     </style>
 </head>
 <body>
-    <div class="cursor-node" id="main-cursor"></div>
-    <div class="cursor-node trail" id="trail-1"></div>
-    <div class="cursor-node trail" id="trail-2"></div>
-
+    <div class="cursor-trail">
+        <div class="node"></div>
+        <div class="node"></div>
+        <div class="node"></div>
+    </div>
     <div class="container">
         <header class="header">
             <h1>DOĞUKAN</h1>
@@ -259,13 +270,8 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const mainCursor = document.getElementById('main-cursor');
-            const trailNodes = [
-                document.getElementById('trail-1'),
-                document.getElementById('trail-2')
-            ];
-
-            const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+            const trail = document.querySelector('.cursor-trail');
+            const nodes = Array.from(trail.children);
 
             let currentX = 0;
             let currentY = 0;
@@ -275,19 +281,20 @@
             document.addEventListener('mousemove', (e) => {
                 targetX = e.clientX;
                 targetY = e.clientY;
-                mainCursor.style.transform = `translate(${targetX}px, ${targetY}px)`;
             });
 
             function animate() {
-                currentX = lerp(currentX, targetX, 0.1);
-                currentY = lerp(currentY, targetY, 0.1);
+                currentX += (targetX - currentX) * 0.15; // Daha hızlı takip için 0.15 değeri
+                currentY += (targetY - currentY) * 0.15; // Daha hızlı takip için 0.15 değeri
 
-                trailNodes.forEach((node, index) => {
-                    const lag = (index + 1) * 0.05;
-                    const trailX = lerp(node.offsetLeft, currentX, 1 - lag);
-                    const trailY = lerp(node.offsetTop, currentY, 1 - lag);
+                nodes.forEach((node, index) => {
+                    const lag = (index + 1) * 0.05; // Her bir düğüm için gecikme
+                    const trailX = currentX - (targetX - currentX) * lag;
+                    const trailY = currentY - (targetY - currentY) * lag;
+
                     node.style.transform = `translate(${trailX}px, ${trailY}px)`;
                 });
+                
                 requestAnimationFrame(animate);
             }
 
