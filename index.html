@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0d1a;
-            --text-color: #e0e0e0;
-            --accent-color: #00e676; /* Vibrant Green */
-            --secondary-color: #4fc3f7; /* Light Blue */
-            --glass-bg: rgba(30, 30, 40, 0.2); /* Şeffaf arka plan */
+            --bg-color: #0A0A1E;
+            --text-color: #E0E0E0;
+            --accent-color: #00E676; /* Vibrant Green */
+            --secondary-color: #4FC3F7; /* Light Blue */
+            --glass-bg: rgba(30, 30, 40, 0.2); /* Transparent Glass */
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: rgba(0, 0, 0, 0.4);
             --font-main: 'Montserrat', sans-serif;
@@ -23,12 +23,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), 0 0 5px rgba(79, 195, 247, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(0, 230, 118, 0.4), 0 0 10px rgba(79, 195, 247, 0.4); }
-            100% { box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), 0 0 5px rgba(79, 195, 247, 0.2); }
         }
 
         body {
@@ -42,21 +36,22 @@
             padding: 20px;
             overflow-x: hidden;
             position: relative;
+            cursor: none; /* İmleci gizle */
         }
 
-        /* Arka plan gradyanları */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 15% 15%, rgba(0, 230, 118, 0.2), transparent 50%),
-                radial-gradient(circle at 85% 85%, rgba(79, 195, 247, 0.2), transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(100, 50, 200, 0.1), transparent 70%);
+        /* İmleci takip eden çekirdek efekti */
+        .cursor-core {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent-color), var(--secondary-color));
+            border-radius: 50%;
+            pointer-events: none;
             z-index: -1;
+            filter: blur(100px);
+            opacity: 0.15;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
         }
 
         .container {
@@ -93,7 +88,6 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 50px;
-            perspective: 1000px;
         }
 
         .section-title {
@@ -130,8 +124,12 @@
         .about-text {
             font-size: 1.1em;
             line-height: 1.8;
-            color: #c9c9c9;
+            color: #C9C9C9;
             font-weight: 300;
+        }
+
+        .about-text strong {
+            color: var(--accent-color);
         }
 
         .interactive-grid {
@@ -162,7 +160,7 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            color: #ccc;
+            color: #CCC;
             transition: transform 0.3s ease, color 0.3s ease;
         }
         
@@ -189,17 +187,18 @@
             opacity: 1;
         }
 
-        /* Responsive design */
         @media (max-width: 768px) {
             .header h1 { font-size: 2.5em; }
             .header p { font-size: 1.2em; }
             .section-title { font-size: 2em; }
             .about-card, .skill-card { padding: 20px; }
             .interactive-grid { grid-template-columns: 1fr; }
+            .cursor-core { display: none; } /* Mobil cihazlarda efekti gizle */
         }
     </style>
 </head>
 <body>
+    <div class="cursor-core"></div>
     <div class="container">
         <header class="header">
             <h1>DOĞUKAN</h1>
@@ -257,5 +256,14 @@
             </div>
         </section>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursorCore = document.querySelector('.cursor-core');
+            document.addEventListener('mousemove', (e) => {
+                cursorCore.style.transform = `translate(${e.clientX - 100}px, ${e.clientY - 100}px)`;
+            });
+        });
+    </script>
 </body>
 </html>
