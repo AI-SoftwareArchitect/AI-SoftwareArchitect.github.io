@@ -6,198 +6,293 @@
     <title>Doğukan | Yapay Zeka Mühendisi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #121212;
-            --text-color: #f0f0f0;
-            --accent-color: #4CAF50; /* A fresh green */
-            --secondary-color: #2196F3; /* A clean blue */
-            --card-bg: #1e1e1e;
-            --border-color: #333;
+            --bg-color: #0d0d1a;
+            --text-color: #e0e0e0;
+            --accent-color: #00e676; /* Vibrant Green */
+            --secondary-color: #4fc3f7; /* Light Blue */
+            --card-bg: rgba(30, 30, 40, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
             --font-main: 'Montserrat', sans-serif;
-            --font-code: 'Roboto Mono', monospace;
+            --font-display: 'Orbitron', sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardHover {
+            0% { transform: scale(1) rotateX(0deg); }
+            100% { transform: scale(1.03) rotateX(5deg); }
         }
 
         body {
-            font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
+            font-family: var(--font-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle background grid and gradient */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(0, 230, 118, 0.1), transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(79, 195, 247, 0.1), transparent 50%);
+            z-index: -1;
         }
 
         .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 1000px;
+            width: 100%;
         }
 
         .header {
             text-align: center;
-            padding: 40px 0;
+            margin-bottom: 60px;
+            animation: fadeIn 1.2s ease-out;
         }
 
         .header h1 {
-            font-size: 3.5em;
-            margin-bottom: 10px;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 4em;
+            margin: 0;
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 230, 118, 0.4), 0 0 10px rgba(79, 195, 247, 0.3);
             letter-spacing: 2px;
-            color: var(--accent-color);
         }
 
         .header p {
-            font-size: 1.2em;
+            font-size: 1.4em;
             font-weight: 300;
-            color: var(--secondary-color);
-            margin: 0;
+            color: var(--text-color);
+            margin-top: 5px;
         }
 
         .section {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease;
-        }
-
-        .section:hover {
-            transform: translateY(-5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 50px;
+            perspective: 1000px;
         }
 
         .section-title {
-            font-size: 2em;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 25px;
+            font-family: var(--font-display);
+            font-size: 2.5em;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-shadow: 0 0 8px var(--secondary-color);
+        }
+
+        .about-card {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--glass-shadow);
+            padding: 30px;
             text-align: center;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .about-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px var(--glass-shadow);
         }
 
         .about-text {
             font-size: 1.1em;
-            font-weight: 300;
-            color: #ccc;
             line-height: 1.8;
-            text-align: justify;
+            color: #c9c9c9;
+            font-weight: 300;
         }
 
-        .about-text strong {
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .skills-grid {
+        .interactive-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
-        .skill-category {
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #2a2a2a;
-            border-left: 3px solid var(--secondary-color);
+        .skill-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px var(--glass-shadow);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 12px 25px var(--glass-shadow);
         }
 
-        .skill-category h3 {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: var(--secondary-color);
-            font-family: var(--font-code);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+        .skill-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4em;
+            text-align: center;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(79, 195, 247, 0.5);
         }
 
-        .skill-category ul {
+        .skill-card ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .skill-category li {
-            padding: 8px 0;
+        .skill-card li {
+            font-size: 1em;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
             color: #ccc;
-            font-family: var(--font-code);
-            font-size: 0.95em;
-            transition: color 0.2s ease;
-        }
-
-        .skill-category li::before {
-            content: '›';
-            color: var(--accent-color);
-            margin-right: 10px;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
         
-        .skill-category li:hover {
-            color: var(--accent-color);
+        .skill-card li:last-child {
+            border-bottom: none;
         }
 
+        .skill-card li::before {
+            content: '>>';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            color: var(--accent-color);
+            transition: left 0.3s ease, opacity 0.3s ease;
+        }
+
+        .skill-card li:hover {
+            color: var(--accent-color);
+            transform: translateX(10px);
+        }
+
+        .skill-card li:hover::before {
+            left: 0;
+            opacity: 1;
+        }
+
+        /* Hover effect to bring card to life */
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 230, 118, 0.1), rgba(79, 195, 247, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .skill-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            .header p {
+                font-size: 1.2em;
+            }
+            .section-title {
+                font-size: 2em;
+            }
+            .about-card, .skill-card {
+                padding: 20px;
+            }
+            .interactive-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>Doğukan</h1>
+            <h1>DOĞUKAN</h1>
             <p>Yapay Zeka Mühendisi</p>
         </header>
 
-        <section id="about" class="section">
-            <h2 class="section-title">Hakkımda</h2>
-            <div class="about-text">
-                <p>Karmaşık problemleri çözmeye ve geleceğin otonom sistemlerini inşa etmeye odaklanan bir Yapay Zeka Mühendisiyim. **PyTorch** gibi modern araçları kullanarak, yapay zeka modellerini optimize ediyor ve ölçeklenebilir altyapılar üzerinde çalışıyorum. **Dağıtık sistemler** ve **AI Agents** konusunda derin bir tutkuya sahibim, bu da beni büyük ölçekli ve yüksek performanslı çözümler üretmeye yöneltiyor.</p>
-                <p>Verimli algoritmalar tasarlamak, sistemleri en verimli şekilde entegre etmek ve sürekli olarak yeni teknolojiler öğrenmek, profesyonel yolculuğumun temel taşlarını oluşturuyor. Yapay zekanın potansiyelini kullanarak gerçek dünya sorunlarına inovatif çözümler getirmeyi hedefliyorum.</p>
+        <section id="about-section" class="section">
+            <h2 class="section-title">Otonom Sistemler Manifestosu</h2>
+            <div class="about-card">
+                <p class="about-text">
+                    Siber-uzayın derinliklerinde, karmaşık veri akışlarını yöneten bir mühendisim. Amacım, sadece kod yazmak değil, <strong>otonom yapay zeka ajanlarının</strong> temellerini atmak. Her bir satır, bilinçli algoritmaların donanım üzerindeki izi. Dağıtık sistemlerin nöral ağlarında, geleceğin düşünce kalıplarını inşa ediyorum.
+                </p>
             </div>
         </section>
 
-        <section id="tech-stack" class="section">
-            <h2 class="section-title">Teknoloji Odak Alanları</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
+        <section id="skills-section" class="section">
+            <h2 class="section-title">Teknoloji Çekirdeği</h2>
+            <div class="interactive-grid">
+                <div class="skill-card">
                     <h3>AI & Makine Öğrenmesi</h3>
                     <ul>
                         <li>PyTorch</li>
                         <li>Yapay Zeka Ajanları (AI Agents)</li>
                         <li>Generatif Modeller</li>
-                        <li>Makine Öğrenmesi Algoritmaları</li>
                         <li>Model Eğitimi & Optimizasyon</li>
                     </ul>
                 </div>
-                <div class="skill-category">
+                <div class="skill-card">
                     <h3>Dağıtık Sistemler</h3>
                     <ul>
                         <li>Dağıtık Mimariler</li>
                         <li>Mikroservis Tasarımı</li>
                         <li>Kafka & RabbitMQ</li>
                         <li>Docker & Kubernetes</li>
-                        <li>Hata Toleransı</li>
                     </ul>
                 </div>
-                <div class="skill-category">
+                <div class="skill-card">
                     <h3>Programlama Dilleri</h3>
                     <ul>
                         <li>Python</li>
                         <li>Go (Golang)</li>
                         <li>Rust</li>
                         <li>C#</li>
-                        <li>TypeScript</li>
                     </ul>
                 </div>
-                <div class="skill-category">
+                <div class="skill-card">
                     <h3>Veri & Altyapı</h3>
                     <ul>
-                        <li>PostgreSQL & MongoDB</li>
-                        <li>Apache Cassandra</li>
+                        <li>NoSQL & Vektör Veritabanları</li>
                         <li>Redis</li>
                         <li>AWS & Cloud Compute</li>
-                        <li>ELK Stack</li>
+                        <li>Hata Toleransı</li>
                     </ul>
                 </div>
             </div>
         </section>
-
     </div>
 </body>
 </html>
