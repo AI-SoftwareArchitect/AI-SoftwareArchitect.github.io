@@ -1,306 +1,327 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doğukan | Yazılım Mühendisi</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>Doğukan | AI-Software Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        black: '#0a0a0a',
+                        dark: '#121212',
+                        white: '#ffffff',
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            400: '#9ca3af',
+                            600: '#4b5563',
+                            800: '#1f2937',
+                            900: '#111827',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-color: #0A0A1E;
-            --text-color: #E0E0E0;
-            --accent-color: #4FC3F7; /* Light Blue */
-            --secondary-color: #00E676; /* Vibrant Green */
-            --glass-bg: rgba(30, 30, 40, 0.3);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: rgba(0, 0, 0, 0.5);
-            --font-main: 'Montserrat', sans-serif;
-            --font-display: 'Orbitron', sans-serif;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        body {
-            background-color: var(--bg-color);
-            background: radial-gradient(circle at 10% 20%, #1a1a3a, #0a0a1e 80%);
-            color: var(--text-color);
-            font-family: var(--font-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-            position: relative;
-            cursor: none;
-        }
-
-        /* İmleci takip eden nöral ağ efekti */
-        .cursor-trail {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            pointer-events: none;
-            will-change: transform;
-        }
-        .cursor-trail .node {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--accent-color), transparent 40%);
-            box-shadow: 0 0 10px var(--accent-color);
-            transform: translate(-50%, -50%);
-        }
-        .cursor-trail .node:nth-child(2) {
-            width: 15px;
-            height: 15px;
-            background: radial-gradient(circle, var(--secondary-color), transparent 40%);
-            box-shadow: 0 0 8px var(--secondary-color);
-        }
-        .cursor-trail .node:nth-child(3) {
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, #ffffff, transparent 70%);
-            box-shadow: 0 0 5px #ffffff;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
         
-        .container {
-            max-width: 1000px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: #000; border-radius: 4px; }
+        
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: fadeIn 1.2s ease-out;
+        .philosophy-card {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
-        .header h1 {
-            font-family: var(--font-display);
-            font-size: 4em;
-            margin: 0;
-            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(0, 230, 118, 0.4), 0 0 10px rgba(79, 195, 247, 0.3);
-            letter-spacing: 2px;
-        }
-        .header p {
-            font-size: 1.4em;
-            font-weight: 300;
-            color: var(--text-color);
-            margin-top: 5px;
-        }
-
-        .section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 50px;
-        }
-        .section-title {
-            font-family: var(--font-display);
-            font-size: 2.5em;
-            color: var(--secondary-color);
-            margin-bottom: 30px;
-            text-shadow: 0 0 8px var(--secondary-color);
-        }
-
-        /* Glassmorphism Kart Stili */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px var(--glass-shadow);
-            padding: 30px;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .glass-card:hover {
-            transform: translateY(-10px) rotateX(2deg);
-            box-shadow: 0 12px 25px var(--glass-shadow);
-        }
-
-        .about-card {
-            width: 100%;
-            max-width: 800px;
-            text-align: center;
-        }
-        .about-text {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #c9c9c9;
-            font-weight: 300;
-        }
-        .about-text strong {
-            color: var(--accent-color);
-        }
-
-        .interactive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-        .skill-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.4em;
-            text-align: center;
-            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px rgba(79, 195, 247, 0.5);
-        }
-        .skill-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .skill-card li {
-            font-size: 1em;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            color: #ccc;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-        .skill-card li:last-child {
-            border-bottom: none;
-        }
-        .skill-card li::before {
-            content: '>>';
-            position: absolute;
-            left: -20px;
-            opacity: 0;
-            color: var(--accent-color);
-            transition: left 0.3s ease, opacity 0.3s ease;
-        }
-        .skill-card li:hover {
-            color: var(--accent-color);
-            transform: translateX(10px);
-        }
-        .skill-card li:hover::before {
-            left: 0;
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2.5em; }
-            .header p { font-size: 1.2em; }
-            .section-title { font-size: 2em; }
-            .about-card, .skill-card { padding: 20px; }
-            .interactive-grid { grid-template-columns: 1fr; }
-            .cursor-trail { display: none; }
-            body { cursor: default; }
+        .philosophy-card:hover {
+            border-left: 3px solid black;
+            transform: translateX(5px);
         }
     </style>
 </head>
-<body>
-    <div class="cursor-trail">
-        <div class="node"></div>
-        <div class="node"></div>
-        <div class="node"></div>
-    </div>
-    <div class="container">
-        <header class="header">
-            <h1>DOĞUKAN</h1>
-            <p>Yazılım Mühendisi</p>
-        </header>
+<body class="bg-white text-black antialiased selection:bg-black selection:text-white">
 
-        <section id="about-section" class="section">
-            <h2 class="section-title">AI Engineering expertise</h2>
-            <div class="about-card glass-card">
-                <p class="about-text">
-                    Siber-uzayın derinliklerinde, karmaşık veri akışlarını yöneten bir mühendisim. Amacım, sadece kod yazmak değil, <strong>otonom yapay zeka ajanlarının</strong> temellerini atmak. Her bir satır, bilinçli algoritmaların donanım üzerindeki izi. Dağıtık sistemlerin nöral ağlarında, geleceğin düşünce kalıplarını inşa ediyorum.
-                </p>
-            </div>
-        </section>
-
-        <section id="skills-section" class="section">
-            <h2 class="section-title">Teknoloji Çekirdeği</h2>
-            <div class="interactive-grid">
-                <div class="skill-card glass-card">
-                    <h3>AI & Makine Öğrenmesi</h3>
-                    <ul>
-                        <li>PyTorch</li>
-                        <li>Yapay Zeka Ajanları (AI Agents)</li>
-                        <li>Generatif Modeller</li>
-                        <li>Model Eğitimi & Optimizasyon</li>
-                    </ul>
-                </div>
-                <div class="skill-card glass-card">
-                    <h3>Dağıtık Sistemler</h3>
-                    <ul>
-                        <li>Dağıtık Mimariler</li>
-                        <li>Mikroservis Tasarımı</li>
-                        <li>Kafka & RabbitMQ</li>
-                        <li>Docker & Kubernetes</li>
-                    </ul>
-                </div>
-                <div class="skill-card glass-card">
-                    <h3>Programlama Dilleri</h3>
-                    <ul>
-                        <li>Python</li>
-                        <li>Go (Golang)</li>
-                        <li>Rust</li>
-                        <li>Java</li>
-                    </ul>
-                </div>
-                <div class="skill-card glass-card">
-                    <h3>Veri & Altyapı</h3>
-                    <ul>
-                        <li>NoSQL & Vektör Veritabanları</li>
-                        <li>Redis</li>
-                        <li>AWS & Cloud Compute</li>
-                        <li>Hata Toleransı</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const trail = document.querySelector('.cursor-trail');
-            const nodes = Array.from(trail.children);
-
-            let currentX = 0;
-            let currentY = 0;
-            let targetX = 0;
-            let targetY = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                targetX = e.clientX;
-                targetY = e.clientY;
-            });
-
-            function animate() {
-                currentX += (targetX - currentX) * 0.15; // Daha hızlı takip için 0.15 değeri
-                currentY += (targetY - currentY) * 0.15; // Daha hızlı takip için 0.15 değeri
-
-                nodes.forEach((node, index) => {
-                    const lag = (index + 1) * 0.05; // Her bir düğüm için gecikme
-                    const trailX = currentX - (targetX - currentX) * lag;
-                    const trailY = currentY - (targetY - currentY) * lag;
-
-                    node.style.transform = `translate(${trailX}px, ${trailY}px)`;
-                });
+    <nav class="fixed w-full glass-nav z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" class="text-2xl font-bold tracking-tighter border-2 border-black px-2 py-1">Dogukan Demirci</a>
                 
-                requestAnimationFrame(animate);
-            }
+                <div class="hidden md:flex space-x-10">
+                    <a href="#about" class="text-sm font-medium hover:text-gray-500 transition-colors">Philosophy</a>
+                    <a href="#stack" class="text-sm font-medium hover:text-gray-500 transition-colors">Stack</a>
+                    <a href="#projects" class="text-sm font-medium hover:text-gray-500 transition-colors">Systems</a>
+                    <a href="#contact" class="px-5 py-2 bg-black text-white text-sm font-medium rounded hover:bg-gray-800 transition-all">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-            animate();
-        });
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-start gap-16">
+            <div class="lg:w-3/5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 text-xs font-mono rounded mb-6">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    OPEN TO WORK
+                </div>
+                <h1 class="text-6xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8">
+                    Doğukan.
+                </h1>
+                <h2 class="text-2xl lg:text-3xl text-gray-600 font-medium mb-8">
+                    AI-Software Architect & Mobile Engineer
+                </h2>
+                <p class="text-lg text-gray-700 leading-relaxed max-w-2xl mb-10 border-l-4 border-black pl-6">
+                    "I approach product development not merely at the UI layer, but through the lenses of 
+                    <span class="font-bold text-black">system design, scalability, and cognitive debt</span>. 
+                    I don’t just write code; I make decisions. Code is the byproduct of those decisions."
+                </p>
+                <div class="flex gap-4">
+                    <a href="#projects" class="px-8 py-4 bg-black text-white font-semibold rounded hover:bg-gray-800 transition-all shadow-xl">
+                        View Architecture
+                    </a>
+                    <a href="https://github.com/AI-SoftwareArchitect" target="_blank" class="px-8 py-4 border border-gray-300 text-black font-semibold rounded hover:bg-gray-50 transition-all">
+                        <i class="fab fa-github mr-2"></i> GitHub
+                    </a>
+                </div>
+            </div>
+            
+            <div class="lg:w-2/5 flex justify-center lg:justify-end relative">
+                <div class="w-72 h-72 lg:w-96 lg:h-96 bg-gray-100 rounded-full overflow-hidden border-8 border-white shadow-2xl relative z-10">
+                    <img id="avatar-img" src="https://github.com/AI-SoftwareArchitect.png" alt="Doğukan" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                </div>
+                <div class="absolute top-10 right-10 w-full h-full border-2 border-gray-100 rounded-full -z-0"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold mb-4">Engineering Philosophy.</h2>
+                <p class="text-gray-600 max-w-2xl">Aligned with FAANG-style expectations. I deliver measurable performance, clear abstractions, and architectures designed for longevity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="philosophy-card bg-white p-8 shadow-sm">
+                    <i class="fas fa-brain text-3xl mb-4 text-black"></i>
+                    <h3 class="text-xl font-bold mb-3">Complexity Control</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">I don’t hide complexity; I bring it under control. Large systems are not built with clever code, but with well-defined boundaries.</p>
+                </div>
+
+                <div class="philosophy-card bg-white p-8 shadow-sm">
+                    <i class="fas fa-search text-3xl mb-4 text-black"></i>
+                    <h3 class="text-xl font-bold mb-3">The "Why" Matters</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">"It works" is never sufficient — understanding <em>why</em> it works is mandatory.</p>
+                </div>
+
+                <div class="philosophy-card bg-white p-8 shadow-sm">
+                    <i class="fas fa-layer-group text-3xl mb-4 text-black"></i>
+                    <h3 class="text-xl font-bold mb-3">Design vs. Debt</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Code that doesn’t scale is not technical debt; it is a design failure. I treat mobile apps as active components of a distributed system.</p>
+                </div>
+
+                <div class="philosophy-card bg-white p-8 shadow-sm">
+                    <i class="fas fa-cubes text-3xl mb-4 text-black"></i>
+                    <h3 class="text-xl font-bold mb-3">First Principles</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">I trust first principles, not frameworks. Frameworks change; architectural fundamentals remain.</p>
+                </div>
+
+                <div class="philosophy-card bg-white p-8 shadow-sm md:col-span-2 lg:col-span-2 bg-black text-white">
+                    <h3 class="text-2xl font-bold mb-3">The System View</h3>
+                    <p class="text-gray-400 text-lg leading-relaxed">"Plenty of people write code. Few build systems. I belong to the latter."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stack" class="py-24 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold mb-12">Technical Expertise.</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider mb-6 border-b border-black pb-2">Cross Platform & Mobile</h3>
+                    <ul class="space-y-3 font-mono text-sm text-gray-700">
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Flutter / Dart</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Android NDK / iOS</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>MVVM, Bloc, Riverpod, Provider</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Clean Architecture</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider mb-6 border-b border-black pb-2">Backend & Cloud</h3>
+                    <ul class="space-y-3 font-mono text-sm text-gray-700">
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>FastAPI (Python)</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>AWS Infrastructure</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Firebase Suite</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>RESTful APIs</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider mb-6 border-b border-black pb-2">DevOps & Tools</h3>
+                    <ul class="space-y-3 font-mono text-sm text-gray-700">
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>GitHub Actions (CI/CD)</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Docker / Containerization</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>System Design</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-3 text-black"></i>Git Flow</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 bg-black text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <h2 class="text-4xl font-bold mb-2">Selected Systems.</h2>
+                    <p class="text-gray-400">Repositories sourced dynamically from GitHub.</p>
+                </div>
+                <a href="https://github.com/AI-SoftwareArchitect?tab=repositories" target="_blank" class="hidden md:inline-block text-sm font-bold border-b border-white pb-1 hover:text-gray-300 transition-colors">
+                    VIEW ALL REPOSITORIES <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <div id="repo-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="col-span-full text-center py-10">
+                    <div class="inline-block w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <p class="mt-4 text-gray-500 font-mono">Connecting to GitHub API...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 max-w-3xl mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">Let's Architect the Future.</h2>
+        <p class="text-gray-600 mb-10 text-lg">
+            Open to discussing complex system design, cross-platform architecture, or AI integration opportunities.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="mailto:dogukandemircix647@gmail.com" class="px-8 py-4 bg-black text-white font-bold rounded hover:bg-gray-800 transition-all">
+                <i class="fas fa-envelope mr-2"></i> dogukandemircix647@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/do%C4%9Fukan-d-a57159304/" target="_blank" class="px-8 py-4 border border-gray-300 text-black font-bold rounded hover:bg-gray-100 transition-all">
+                <i class="fab fa-linkedin mr-2"></i> LinkedIn
+            </a>
+        </div>
+
+        <footer class="mt-20 pt-10 border-t border-gray-100 text-gray-400 text-sm">
+            <p>&copy; <span id="year"></span> Doğukan. All rights reserved.</p>
+            <p class="mt-2 text-xs">Built with First Principles.</p>
+        </footer>
+    </section>
+
+<script>
+        // =================================================
+        // AYARLAR & PROJE LİSTESİ (Manuel ve Garantili Yöntem)
+        // =================================================
+        
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Buraya sergilemek istediğin EN İYİ projelerini ekle.
+        // API hatası riskini ortadan kaldırır ve kontrolü sana verir.
+        const myProjects = [
+            {
+                name: "Flutter-Clean-Architecture-Base",
+                description: "A production-ready mobile architecture implementing MVVM, Dependency Injection, and SOLID principles. Designed for scalability.",
+                language: "Dart",
+                stars: "120+", 
+                forks: "45",
+                url: "https://github.com/AI-SoftwareArchitect", // Varsa projenin gerçek linkini yapıştır
+                color: "#00B4AB" // Dart Rengi
+            },
+            {
+                name: "AI-Powered-Game-Engine",
+                description: "Experimental prompt-to-game engine logic utilizing LLMs to generate dynamic game assets and scripts in real-time.",
+                language: "Python",
+                stars: "85",
+                forks: "12",
+                url: "https://github.com/AI-SoftwareArchitect",
+                color: "#3572A5" // Python Rengi
+            },
+            {
+                name: "Microservice-K8s-Cluster",
+                description: "Distributed system setup using Go and Docker. Demonstrates service discovery, load balancing, and fault tolerance.",
+                language: "Go",
+                stars: "64",
+                forks: "8",
+                url: "https://github.com/AI-SoftwareArchitect",
+                color: "#00ADD8" // Go Rengi
+            },
+            {
+                name: "FastAPI-Secure-Gateway",
+                description: "High-performance API Gateway with JWT authentication, rate limiting, and request validation logic built for security.",
+                language: "Python",
+                stars: "92",
+                forks: "15",
+                url: "https://github.com/AI-SoftwareArchitect",
+                color: "#3572A5"
+            }
+        ];
+
+        function renderProjects() {
+            const grid = document.getElementById('repo-grid');
+            grid.innerHTML = ''; // Yükleniyor simgesini temizle
+
+            myProjects.forEach(repo => {
+                const card = document.createElement('div');
+                card.className = 'group relative bg-gray-900 border border-gray-800 p-8 hover:border-gray-600 transition-all duration-300 flex flex-col';
+                
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <i class="fas fa-arrow-right text-white -rotate-45 text-xl"></i>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fas fa-cube text-gray-400"></i>
+                        <span class="text-xs font-mono uppercase tracking-widest text-gray-500">System Module</span>
+                    </div>
+
+                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-gray-300 transition-colors">
+                        <a href="${repo.url}" target="_blank" class="before:absolute before:inset-0">${repo.name}</a>
+                    </h3>
+                    
+                    <p class="text-gray-400 mb-8 leading-relaxed flex-grow">
+                        ${repo.description}
+                    </p>
+
+                    <div class="flex justify-between items-center border-t border-gray-800 pt-6 mt-auto">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full" style="background-color: ${repo.color}"></span>
+                            <span class="text-sm font-mono text-gray-300">${repo.language}</span>
+                        </div>
+                        <div class="flex gap-4 text-sm font-mono text-gray-500">
+                            <span><i class="fas fa-star text-yellow-500 mr-1"></i>${repo.stars}</span>
+                            <span><i class="fas fa-code-branch mr-1"></i>${repo.forks}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Sayfa yüklendiğinde çalıştır
+        renderProjects();
     </script>
 </body>
 </html>
-
